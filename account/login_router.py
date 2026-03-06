@@ -1,10 +1,47 @@
-from fastapi import APIRouter, Request
+import bcrypt
+from fastapi import APIRouter, Response
 from .login_form import LoginForm
 from .login_response import LoginResponse
 from .account_manager import account_manager
+from .JWT_token import JWT_token_dispenser
 
 router = APIRouter()
 
 @router.post("/login_user", response_model=LoginResponse)
-async def login_user(request: Request, form: LoginForm):
-    pass
+async def login_user(response: Response, form: LoginForm):
+    user = await account_manager.get_user_by_email(form.email)
+    
+    if not user:
+        return LoginResponse(
+            success=False,
+            message="invalid",
+            token=""
+        )
+
+    hash = user.hashed_password
+    
+    correct_pass = bcrypt.checkpw(form.password.encode(), hash.encode())
+    
+    if not correct_pass:
+        return LoginResponse(
+            success=False,
+            message="invalid",
+            token=""
+        )
+
+    token = JWT_token_dispenser.make_token(user)
+
+    response.set_cookie(
+        "token",
+        token,
+        httponly=True,
+        secure=True,
+        samesite="strict"
+    )
+
+    return LoginResponse(
+        success=True,
+        message="you are logged in, surprisingly",
+        token=token
+    )
+

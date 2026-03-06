@@ -1,0 +1,85 @@
+================================================================================
+SCANNING DIRECTORY: D:\PythonProjects\fastapi_login_form
+================================================================================
+
+------------------------------------------------------------
+FILE: .gitignore
+TYPE: No extension
+LINES: 3
+------------------------------------------------------------
+
+__pycache__
+*.pyc
+JWT_secret.txt
+
+------------------------------------------------------------
+FILE: JWT_secret.txt
+TYPE: .txt
+LINES: 1
+------------------------------------------------------------
+
+Whatever. Kevin told me to write anything I want here.
+
+------------------------------------------------------------
+FILE: main.py
+TYPE: .py
+LINES: 31
+------------------------------------------------------------
+
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from contextlib import asynccontextmanager
+from pathlib import Path
+from account import register_router
+from account import login_router
+from navigation import HTML_responder
+from account.account_manager import account_manager
+from account.JWT_token import JWT_token_dispenser
+
+async def app_startup():
+    print("Backend start up!")
+    await account_manager.initialize()
+    JWT_token_dispenser.initialize()
+
+async def app_shutdown():
+    print("Backend shutting down!")
+
+@asynccontextmanager
+async def app_lifespan(api: FastAPI):
+    await app_startup()
+    yield
+    await app_shutdown()
+
+BASE_DIR = Path(__file__).resolve().parent
+
+app = FastAPI(lifespan=app_lifespan)
+app.mount("/static/", StaticFiles(directory=Path(BASE_DIR, "static")), name="static")
+app.include_router(HTML_responder.router)
+app.include_router(register_router.router, prefix="/api")
+app.include_router(login_router.router, prefix="/api") 
+
+------------------------------------------------------------
+FILE: output_for_lulz.txt
+TYPE: .txt
+LINES: 0
+------------------------------------------------------------
+
+
+
+------------------------------------------------------------
+FILE: requirements.txt
+TYPE: .txt
+LINES: 4
+------------------------------------------------------------
+
+fastapi[all]==0.134
+bcrypt==5.0.0
+asyncpg==0.31.0
+pyjwt==2.11.0
+
+------------------------------------------------------------
+FILE: _line_counter.py
+TYPE: .py
+LINES: 108
+------------------------------------------------------------
+

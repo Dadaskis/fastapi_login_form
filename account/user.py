@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr
-from datetime import datetime
+from datetime import datetime, timedelta, UTC
 from typing import Optional, Dict, Any
 
 class User(BaseModel):
@@ -33,3 +33,16 @@ class User(BaseModel):
 
     class Config:
         from_attributes = True  # Allows creation from asyncpg record
+    
+    def get_payload(self) -> dict:
+        tomorrow = datetime.now(UTC) + timedelta(days=1)
+        return {
+            "id": self.id,
+            "username": self.username,
+            "full_name": self.full_name,
+            "bio": self.bio,
+            "avatar": self.avatar,
+            "soul_status": self.soul_status,
+            "is_superuser": self.is_superuser,
+            "exp": tomorrow
+        }

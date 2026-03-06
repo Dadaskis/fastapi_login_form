@@ -47,22 +47,36 @@ function handleLogin(event) {
     loginButton.disabled = true;
     loginButton.innerHTML = '<span class="spinner"></span>AUTHENTICATING...';
     
-    // Simulate API call
-    setTimeout(() => {
-        if (email.value === 'demo@example.com' && password.value === 'demo123') {
+    // DO THE REAL API CALL WOOHOO
+    fetch('/api/login_user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: email.value,
+            password: password.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
             loginButton.innerHTML = '✓ ACCESS GRANTED';
             setTimeout(() => {
                 window.location.href = '/dashboard';
             }, 1000);
         } else {
-            loginButton.disabled = false;
-            loginButton.innerHTML = 'Login';
-            
-            password.classList.add('error');
-            passwordError.textContent = 'ACCESS DENIED - INVALID CREDENTIALS';
-            passwordError.classList.add('show');
+            throw new Error(data.message);
         }
-    }, 1500);
+    })
+    .catch(error => {
+        loginButton.disabled = false;
+        loginButton.innerHTML = 'Login';
+        
+        password.classList.add('error');
+        passwordError.textContent = 'ACCESS DENIED - INVALID CREDENTIALS';
+        passwordError.classList.add('show');
+    });
 }
 
 function isValidEmail(email) {

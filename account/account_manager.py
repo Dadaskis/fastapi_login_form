@@ -25,7 +25,7 @@ class AccountManager:
         self.initialized = True
         print("✅ AccountManager initialized. Kevin is watching.")
     
-    async def process_user_obj_from_query(result) -> Optional[User]:
+    async def process_user_obj_from_query(self, result) -> Optional[User]:
         """
         Just a function to keep the repetitive mess off get_user_by_id,
         get_user_by_email and get_user_by_username.

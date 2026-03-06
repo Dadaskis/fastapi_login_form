@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Response
 from .register_form import RegisterForm
 from .register_response import RegisterResponse
 from .account_manager import account_manager
@@ -6,7 +6,7 @@ from .account_manager import account_manager
 router = APIRouter()
 
 @router.post("/register_user", response_model=RegisterResponse)
-async def register_user(request: Request, form: RegisterForm):
+async def register_user(response: Response, form: RegisterForm):
     if await account_manager.does_user_exist_with_email(form.email):
         return RegisterResponse(
             success=False,
