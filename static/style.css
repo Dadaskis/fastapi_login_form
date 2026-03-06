@@ -1,0 +1,13 @@
+/* General Improvements */
+html {
+	background: #0d1f2d; /* Dark cyan background */
+	scroll-behavior: smooth; /* Smooth scrolling */
+	text-shadow: 0 0 10px #bdeef3, 0 0 20px #59e0f0; /* Cyan glow */
+	
+	white-space: normal;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+
+	color: #e0f7fa; /* Light cyan text */
+	font: condensed 1.0em "Fira Sans", sans-serif;
+}

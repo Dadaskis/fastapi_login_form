@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI - Dashboard</title>
+    <link href="/static/dashboard.css" rel="stylesheet">
+    <script src="static/dashboard.js"></script>
+</head>
+<body>
+    <!-- Scanlines overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Sidebar -->
+    <div class="dashboard-sidebar">
+        <div class="sidebar-header">
+            <h2>FASTAPI</h2>
+            <div class="sidebar-version">v0.108+</div>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar" id="userAvatar">
+                <!-- JS will populate initial -->
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-email" id="userEmail">loading@example.com</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="overview">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">OVERVIEW</span>
+            </a>
+            <a href="#" class="nav-item" data-section="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">PROFILE</span>
+            </a>
+            <a href="#" class="nav-item" data-section="security">
+                <span class="nav-icon">🔒</span>
+                <span class="nav-text">SECURITY</span>
+            </a>
+            <a href="#" class="nav-item" data-section="activity">
+                <span class="nav-icon">📋</span>
+                <span class="nav-text">ACTIVITY</span>
+            </a>
+            <a href="#" class="nav-item" data-section="api">
+                <span class="nav-icon">⚡</span>
+                <span class="nav-text">API KEYS</span>
+            </a>
+            <a href="#" class="nav-item" data-section="billing">
+                <span class="nav-icon">💰</span>
+                <span class="nav-text">BILLING</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item" id="logoutBtn">
+                <span class="nav-icon">🚪</span>
+                <span class="nav-text">LOGOUT</span>
+            </a>
+            <div class="sidebar-status">
+                <span class="status-indicator"></span>
+                CONNECTED
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-main">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1 id="sectionTitle">OVERVIEW</h1>
+            <div class="header-actions">
+                <div class="header-search">
+                    <input type="text" placeholder="SEARCH..." id="globalSearch">
+                </div>
+                <div class="header-notifications" id="notificationsBtn">
+                    <span class="notification-badge">3</span>
+                    🔔
+                </div>
+                <div class="header-settings" id="settingsBtn">
+                    ⚙️
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="dashboard-content">
+            <!-- Overview Section -->
+            <section id="overview-section" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-details">
+                            <div class="stat-value" id="statProjects">12</div>
+                            <div class="stat-label">ACTIVE PROJECTS</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔑</div>
+                        <div class="stat-details">
+                            <div class="stat-value" id="statApiKeys">4</div>
+                            <div class="stat-label">API KEYS</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📡</div>
+                        <div class="stat-details">
+                            <div class="stat-value" id="statRequests">2.4k</div>
+                            <div class="stat-label">REQUESTS TODAY</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-details">
+                            <div class="stat-value" id="statUptime">99.9%</div>
+                            <div class="stat-label">UPTIME</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>REQUESTS (LAST 7 DAYS)</h3>
+                        <div class="chart-container" id="requestsChart">
+                            <!-- Chart will be rendered here -->
+                            <div class="chart-placeholder">
+                                <div class="bar" style="height: 60px;"></div>
+                                <div class="bar" style="height: 85px;"></div>
+                                <div class="bar" style="height: 45px;"></div>
+                                <div class="bar" style="height: 95px;"></div>
+                                <div class="bar" style="height: 70px;"></div>
+                                <div class="bar" style="height: 110px;"></div>
+                                <div class="bar" style="height: 80px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>ERROR RATE</h3>
+                        <div class="chart-container" id="errorsChart">
+                            <div class="chart-placeholder">
+                                <div class="bar error" style="height: 20px;"></div>
+                                <div class="bar error" style="height: 15px;"></div>
+                                <div class="bar error" style="height: 30px;"></div>
+                                <div class="bar error" style="height: 12px;"></div>
+                                <div class="bar error" style="height: 18px;"></div>
+                                <div class="bar error" style="height: 25px;"></div>
+                                <div class="bar error" style="height: 10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3>RECENT ACTIVITY</h3>
+                    <div class="activity-list" id="recentActivity">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="content-section">
+                <div class="profile-header">
+                    <div class="profile-avatar-large" id="profileAvatar"></div>
+                    <div class="profile-title">
+                        <h2 id="profileDisplayName">Loading...</h2>
+                        <p id="profileMemberSince">Member since loading...</p>
+                    </div>
+                </div>
+
+                <form id="profileForm" onsubmit="handleProfileUpdate(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profileUsername">USERNAME</label>
+                            <input type="text" id="profileUsername" value="johndoe">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileDisplayName">DISPLAY NAME</label>
+                            <input type="text" id="profileDisplayNameInput" value="John Doe">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profileEmail">E-MAIL</label>
+                        <input type="email" id="profileEmail" value="john.doe@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profileBio">BIO</label>
+                        <textarea id="profileBio" rows="4">Full-stack developer specializing in FastAPI and Godot. Building the future one endpoint at a time.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profileCompany">COMPANY/ORGANIZATION</label>
+                        <input type="text" id="profileCompany" value="Independent Developer">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profileLocation">LOCATION</label>
+                        <input type="text" id="profileLocation" value="Riga, Latvia">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="profile-save-btn">SAVE CHANGES</button>
+                        <button type="button" class="profile-cancel-btn" onclick="cancelProfileEdit()">CANCEL</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Security Section -->
+            <section id="security-section" class="content-section">
+                <h3>CHANGE PASSWORD</h3>
+                
+                <form id="securityForm" onsubmit="handlePasswordChange(event)">
+                    <div class="form-group">
+                        <label for="currentPassword">CURRENT PASSWORD</label>
+                        <input type="password" id="currentPassword" placeholder="••••••••">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword">NEW PASSWORD</label>
+                        <input type="password" id="newPassword" placeholder="••••••••">
+                        <div class="password-requirements" id="securityReqLength">✗ At least 6 characters</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmNewPassword">CONFIRM NEW PASSWORD</label>
+                        <input type="password" id="confirmNewPassword" placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="security-save-btn">UPDATE PASSWORD</button>
+                </form>
+
+                <h3 style="margin-top: 40px;">TWO-FACTOR AUTHENTICATION</h3>
+                
+                <div class="twofa-status">
+                    <div class="status-text">
+                        <strong>STATUS:</strong> 
+                        <span class="twofa-disabled">DISABLED</span>
+                    </div>
+                    <button class="twofa-enable-btn" onclick="enable2FA()">ENABLE 2FA</button>
+                </div>
+
+                <h3 style="margin-top: 40px;">SESSIONS</h3>
+                
+                <div class="sessions-list" id="sessionsList">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Activity Section -->
+            <section id="activity-section" class="content-section">
+                <div class="activity-filters">
+                    <select id="activityFilter">
+                        <option value="all">ALL ACTIVITY</option>
+                        <option value="login">LOGINS</option>
+                        <option value="api">API CALLS</option>
+                        <option value="settings">SETTINGS CHANGES</option>
+                        <option value="security">SECURITY</option>
+                    </select>
+                    <select id="activityTimeframe">
+                        <option value="24h">LAST 24 HOURS</option>
+                        <option value="7d">LAST 7 DAYS</option>
+                        <option value="30d">LAST 30 DAYS</option>
+                        <option value="all">ALL TIME</option>
+                    </select>
+                </div>
+
+                <div class="activity-timeline" id="activityTimeline">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- API Keys Section -->
+            <section id="api-section" class="content-section">
+                <div class="api-header">
+                    <h3>API KEYS</h3>
+                    <button class="api-create-btn" onclick="createApiKey()">+ CREATE NEW KEY</button>
+                </div>
+
+                <div class="api-keys-list" id="apiKeysList">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="api-docs-link">
+                    <a href="/docs" target="_blank">VIEW API DOCUMENTATION →</a>
+                </div>
+            </section>
+
+            <!-- Billing Section -->
+            <section id="billing-section" class="content-section">
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>CURRENT PLAN</h3>
+                        <span class="plan-badge">ACTIVE</span>
+                    </div>
+                    <div class="plan-name">DEVELOPER PRO</div>
+                    <div class="plan-price">$29 <span>/month</span></div>
+                    <div class="plan-features">
+                        <div class="plan-feature">✓ 10,000 API calls/day</div>
+                        <div class="plan-feature">✓ 5 team members</div>
+                        <div class="plan-feature">✓ Priority support</div>
+                        <div class="plan-feature">✓ Advanced analytics</div>
+                    </div>
+                    <button class="plan-change-btn">CHANGE PLAN</button>
+                </div>
+
+                <div class="payment-methods">
+                    <h3>PAYMENT METHODS</h3>
+                    <div class="payment-card">
+                        <div class="payment-card-type">💳 VISA ending in 4242</div>
+                        <div class="payment-card-expiry">Expires 12/25</div>
+                        <div class="payment-card-actions">
+                            <button class="payment-edit">EDIT</button>
+                            <button class="payment-remove">REMOVE</button>
+                        </div>
+                    </div>
+                    <button class="payment-add-btn">+ ADD PAYMENT METHOD</button>
+                </div>
+
+                <div class="billing-history">
+                    <h3>BILLING HISTORY</h3>
+                    <table class="billing-table">
+                        <thead>
+                            <tr>
+                                <th>DATE</th>
+                                <th>DESCRIPTION</th>
+                                <th>AMOUNT</th>
+                                <th>STATUS</th>
+                                <th>INVOICE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billingHistory">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3>NOTIFICATIONS</h3>
+            <button class="notification-close" onclick="closeNotifications()">✕</button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3>QUICK SETTINGS</h3>
+            <button class="settings-close" onclick="closeSettings()">✕</button>
+        </div>
+        <div class="settings-list">
+            <div class="setting-item">
+                <span>EMAIL NOTIFICATIONS</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <span>MARKETING EMAILS</span>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <span>AUTO-RENEW SUBSCRIPTION</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <span>DARK MODE</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked disabled>
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="setting-note">(always dark, deal with it)</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
