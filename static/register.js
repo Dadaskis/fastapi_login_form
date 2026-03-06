@@ -112,8 +112,7 @@ function handleRegister(event) {
             window.location.href = '/login?registered=true';
         }, 1000);
         
-        /*
-        fetch('/api/register', {
+        fetch('/api/register_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -152,7 +151,6 @@ function handleRegister(event) {
                 alert('REGISTRATION FAILED: ' + error.message);
             }
         });
-        */
     }, 1500);
 }
 
