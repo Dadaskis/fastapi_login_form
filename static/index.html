@@ -3,11 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FastAPI - Login Form</title>
-    <link href="/static/style.css" rel="stylesheet">
+    <title>FastAPI - Modern Web Framework</title>
+    <link href="/static/index.css" rel="stylesheet">
+    <script src="static/index.js" defer></script>
 </head>
 <body>
-    <p>Hello, world!</p>
-    <img src="/static/images/test.png"/>
+    <!-- Scanlines overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">FASTAPI</span>
+                <span class="logo-version">v0.108+</span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#features" class="nav-link">FEATURES</a>
+                <a href="#docs" class="nav-link">DOCUMENTATION</a>
+                <a href="#examples" class="nav-link">EXAMPLES</a>
+                <a href="#community" class="nav-link">COMMUNITY</a>
+                <a href="#pricing" class="nav-link">PRICING</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="/login" class="nav-btn login-btn">LOGIN</a>
+                <a href="/register" class="nav-btn register-btn">SIGN UP</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#features" class="mobile-link">FEATURES</a>
+        <a href="#docs" class="mobile-link">DOCUMENTATION</a>
+        <a href="#examples" class="mobile-link">EXAMPLES</a>
+        <a href="#community" class="mobile-link">COMMUNITY</a>
+        <a href="#pricing" class="mobile-link">PRICING</a>
+        <div class="mobile-divider"></div>
+        <a href="/login" class="mobile-link login-mobile">LOGIN</a>
+        <a href="/register" class="mobile-link register-mobile">SIGN UP</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-highlight">FAST</span>API
+                    <span class="title-sub">MODERN WEB FRAMEWORK</span>
+                </h1>
+                <p class="hero-description">
+                    Build high-performance APIs with Python 3.7+ based on standard Python type hints. 
+                    Automatic interactive documentation, dependency injection, and async support out of the box.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-badge">
+                        <span class="stat-number">80k+</span>
+                        <span class="stat-label">GITHUB STARS</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-number">50M+</span>
+                        <span class="stat-label">DOWNLOADS/MONTH</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-number">400+</span>
+                        <span class="stat-label">CONTRIBUTORS</span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="/register" class="hero-btn primary-btn">GET STARTED</a>
+                    <a href="#docs" class="hero-btn secondary-btn">READ DOCS</a>
+                </div>
+                <div class="hero-demo">
+                    <div class="demo-code">
+                        <pre><code><span class="code-keyword">from</span> <span class="code-module">fastapi</span> <span class="code-keyword">import</span> FastAPI
+
+<span class="code-variable">app</span> = <span class="code-function">FastAPI</span>()
+
+<span class="code-decorator">@app.get</span>(<span class="code-string">"/"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">root</span>():
+    <span class="code-keyword">return</span> {<span class="code-string">"message"</span>: <span class="code-string">"Hello World"</span>}
+
+<span class="code-decorator">@app.get</span>(<span class="code-string">"/items/{item_id}"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">read_item</span>(<span class="code-variable">item_id</span>: <span class="code-type">int</span>):
+    <span class="code-keyword">return</span> {<span class="code-string">"item_id"</span>: item_id}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-container">
+            <h2 class="section-title">WHY <span class="title-highlight">FASTAPI</span>?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">BLazing Fast</h3>
+                    <p class="feature-description">
+                        On par with Node.js and Go. One of the fastest Python frameworks available.
+                    </p>
+                    <div class="feature-benchmark">
+                        <div class="benchmark-item">
+                            <span class="benchmark-value">300k</span>
+                            <span class="benchmark-label">REQ/SEC</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3 class="feature-title">Type Hints</h3>
+                    <p class="feature-description">
+                        Built on Python type hints. Automatic validation, serialization, and documentation.
+                    </p>
+                    <div class="feature-code">
+                        <pre><code><span class="code-keyword">def</span> <span class="code-function">read_item</span>(<span class="code-variable">item_id</span>: <span class="code-type">int</span>) -> <span class="code-type">Item</span>:
+    ...</code></pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">Auto Documentation</h3>
+                    <p class="feature-description">
+                        Interactive API docs with Swagger UI and ReDoc. Generated from your code.
+                    </p>
+                    <div class="feature-docs">
+                        <span class="docs-badge">/docs</span>
+                        <span class="docs-badge">/redoc</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3 class="feature-title">Dependency Injection</h3>
+                    <p class="feature-description">
+                        Powerful dependency injection system. Reusable components, authentication, database sessions.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3 class="feature-title">Async Support</h3>
+                    <p class="feature-description">
+                        Native async/await support. Handle WebSockets and high concurrency elegantly.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Security</h3>
+                    <p class="feature-description">
+                        Built-in security utilities. OAuth2, JWT, API keys, CORS, and more.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="docs">
+        <div class="section-container">
+            <h2 class="section-title">BUILT-IN <span class="title-highlight">DOCUMENTATION</span></h2>
+            <div class="docs-showcase">
+                <div class="docs-card">
+                    <h3 class="docs-card-title">SWAGGER UI</h3>
+                    <div class="docs-preview swagger-preview">
+                        <div class="preview-header">
+                            <span class="preview-dot red"></span>
+                            <span class="preview-dot yellow"></span>
+                            <span class="preview-dot green"></span>
+                            <span class="preview-url">/docs</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="endpoint get">
+                                <span class="method">GET</span>
+                                <span class="path">/</span>
+                            </div>
+                            <div class="endpoint get">
+                                <span class="method">GET</span>
+                                <span class="path">/items/{item_id}</span>
+                            </div>
+                            <div class="endpoint post">
+                                <span class="method">POST</span>
+                                <span class="path">/items/</span>
+                            </div>
+                            <div class="endpoint put">
+                                <span class="method">PUT</span>
+                                <span class="path">/items/{item_id}</span>
+                            </div>
+                            <div class="endpoint delete">
+                                <span class="method">DELETE</span>
+                                <span class="path">/items/{item_id}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="docs-card">
+                    <h3 class="docs-card-title">REDOC</h3>
+                    <div class="docs-preview redoc-preview">
+                        <div class="preview-header">
+                            <span class="preview-dot red"></span>
+                            <span class="preview-dot yellow"></span>
+                            <span class="preview-dot green"></span>
+                            <span class="preview-url">/redoc</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="schema">Item</div>
+                            <div class="schema-field">
+                                <span class="field-name">name</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="schema-field">
+                                <span class="field-name">price</span>
+                                <span class="field-type">number</span>
+                            </div>
+                            <div class="schema-field">
+                                <span class="field-name">is_offer</span>
+                                <span class="field-type">boolean</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Section -->
+    <section id="examples" class="examples">
+        <div class="section-container">
+            <h2 class="section-title">CODE <span class="title-highlight">EXAMPLES</span></h2>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h3 class="example-title">PATH PARAMETERS</h3>
+                    <pre><code><span class="code-decorator">@app.get</span>(<span class="code-string">"/users/{user_id}"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">get_user</span>(<span class="code-variable">user_id</span>: <span class="code-type">int</span>):
+    <span class="code-keyword">return</span> {<span class="code-string">"user_id"</span>: user_id}</code></pre>
+                </div>
+
+                <div class="example-card">
+                    <h3 class="example-title">QUERY PARAMETERS</h3>
+                    <pre><code><span class="code-decorator">@app.get</span>(<span class="code-string">"/items/"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">list_items</span>(
+    <span class="code-variable">skip</span>: <span class="code-type">int</span> = <span class="code-number">0</span>, 
+    <span class="code-variable">limit</span>: <span class="code-type">int</span> = <span class="code-number">10</span>
+):
+    <span class="code-keyword">return</span> items[skip:skip + limit]</code></pre>
+                </div>
+
+                <div class="example-card">
+                    <h3 class="example-title">REQUEST BODY</h3>
+                    <pre><code><span class="code-keyword">class</span> <span class="code-class">Item</span>(<span class="code-class">BaseModel</span>):
+    <span class="code-variable">name</span>: <span class="code-type">str</span>
+    <span class="code-variable">price</span>: <span class="code-type">float</span>
+
+<span class="code-decorator">@app.post</span>(<span class="code-string">"/items/"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">create_item</span>(<span class="code-variable">item</span>: <span class="code-type">Item</span>):
+    <span class="code-keyword">return</span> item</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="community">
+        <div class="section-container">
+            <h2 class="section-title">JOIN THE <span class="title-highlight">COMMUNITY</span></h2>
+            <div class="community-grid">
+                <a href="#" class="community-card">
+                    <div class="community-icon">📖</div>
+                    <h3 class="community-title">DOCUMENTATION</h3>
+                    <p class="community-description">Comprehensive guides and API reference</p>
+                </a>
+
+                <a href="#" class="community-card">
+                    <div class="community-icon">💬</div>
+                    <h3 class="community-title">DISCORD</h3>
+                    <p class="community-description">Chat with developers, get help, share ideas</p>
+                    <span class="community-meta">15k+ members</span>
+                </a>
+
+                <a href="#" class="community-card">
+                    <div class="community-icon">🐙</div>
+                    <h3 class="community-title">GITHUB</h3>
+                    <p class="community-description">Star the repo, contribute, report issues</p>
+                    <span class="community-meta">80k+ stars</span>
+                </a>
+
+                <a href="#" class="community-card">
+                    <div class="community-icon">🐦</div>
+                    <h3 class="community-title">TWITTER</h3>
+                    <p class="community-description">Follow for updates and news</p>
+                </a>
+
+                <a href="#" class="community-card">
+                    <div class="community-icon">📝</div>
+                    <h3 class="community-title">BLOG</h3>
+                    <p class="community-description">Tutorials, tips, and community stories</p>
+                </a>
+
+                <a href="#" class="community-card">
+                    <div class="community-icon">📺</div>
+                    <h3 class="community-title">YOUTUBE</h3>
+                    <p class="community-description">Video tutorials and conference talks</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="section-container">
+            <h2 class="section-title">SIMPLE <span class="title-highlight">PRICING</span></h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="pricing-title">DEVELOPER</h3>
+                    <div class="pricing-price">
+                        <span class="price">$0</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Unlimited public projects</li>
+                        <li>✓ Community support</li>
+                        <li>✓ Basic analytics</li>
+                        <li>✓ API documentation</li>
+                        <li>✗ Priority support</li>
+                        <li>✗ Team collaboration</li>
+                    </ul>
+                    <a href="/register" class="pricing-btn">GET STARTED</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="featured-badge">POPULAR</div>
+                    <h3 class="pricing-title">PRO</h3>
+                    <div class="pricing-price">
+                        <span class="price">$29</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Everything in Developer</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Advanced analytics</li>
+                        <li>✓ Team collaboration (5 users)</li>
+                        <li>✓ API key management</li>
+                        <li>✓ Custom domains</li>
+                    </ul>
+                    <a href="/register" class="pricing-btn featured-btn">START FREE TRIAL</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3 class="pricing-title">ENTERPRISE</h3>
+                    <div class="pricing-price">
+                        <span class="price">$99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Everything in Pro</li>
+                        <li>✓ Unlimited team members</li>
+                        <li>✓ SSO authentication</li>
+                        <li>✓ Audit logs</li>
+                        <li>✓ SLA guarantee</li>
+                        <li>✓ Dedicated support</li>
+                    </ul>
+                    <a href="/contact" class="pricing-btn">CONTACT SALES</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="section-container">
+            <h2 class="cta-title">READY TO BUILD <span class="title-highlight">SOMETHING GREAT</span>?</h2>
+            <p class="cta-description">Join thousands of developers using FastAPI to build high-performance APIs.</p>
+            <div class="cta-actions">
+                <a href="/register" class="cta-btn primary-btn">GET STARTED FOR FREE</a>
+                <a href="#docs" class="cta-btn secondary-btn">READ DOCUMENTATION</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4 class="footer-title">FASTAPI</h4>
+                    <p class="footer-description">
+                        Modern web framework for building APIs with Python.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link">🐙</a>
+                        <a href="#" class="social-link">💬</a>
+                        <a href="#" class="social-link">🐦</a>
+                        <a href="#" class="social-link">📝</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">DOCUMENTATION</h4>
+                    <a href="#" class="footer-link">Getting Started</a>
+                    <a href="#" class="footer-link">Tutorial</a>
+                    <a href="#" class="footer-link">API Reference</a>
+                    <a href="#" class="footer-link">Examples</a>
+                    <a href="#" class="footer-link">Release Notes</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">COMMUNITY</h4>
+                    <a href="#" class="footer-link">Discord</a>
+                    <a href="#" class="footer-link">GitHub</a>
+                    <a href="#" class="footer-link">Twitter</a>
+                    <a href="#" class="footer-link">Stack Overflow</a>
+                    <a href="#" class="footer-link">Blog</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">LEGAL</h4>
+                    <a href="/terms" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Cookie Policy</a>
+                    <a href="#" class="footer-link">Security</a>
+                    <a href="#" class="footer-link">GDPR</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    © 2024 FastAPI. All rights reserved. 
+                    <span class="kevin-note">Kevin from accounting approves this message.</span>
+                </div>
+                <div class="footer-status">
+                    <span class="status-dot"></span>
+                    All systems operational
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
