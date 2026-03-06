@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from pathlib import Path
 from account import register_router
+from account import login_router
 from navigation import HTML_responder
 from account.account_manager import account_manager
 
@@ -25,3 +26,4 @@ app = FastAPI(lifespan=app_lifespan)
 app.mount("/static/", StaticFiles(directory=Path(BASE_DIR, "static")), name="static")
 app.include_router(HTML_responder.router)
 app.include_router(register_router.router, prefix="/api")
+app.include_router(login_router.router, prefix="/api") 

@@ -1,2 +1,3 @@
 ## YES I'VE VIBECODED THE ENTIRETY OF THIS FRONTEND BECAUSE I CAN'T BOTHER MYSELF TO WRITE IT MANUALLY ANYMORE
 By the way I absolutely love how terms of agreement are written here. AI does a GREAT job being a lawyer.
+Live long, Kevin.
