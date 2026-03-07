@@ -1,10 +1,10 @@
 // State management
 let currentUser = {
     username: 'johndoe',
-    displayName: 'John Doe',
+    full_name: 'John Doe',
     email: 'john.doe@example.com',
     avatar: 'JD',
-    memberSince: 'January 2024',
+    created_at: 'January 2024',
     company: 'Independent Developer',
     location: 'Riga, Latvia',
     bio: 'Full-stack developer specializing in FastAPI and Godot. Building the future one endpoint at a time.'
@@ -45,7 +45,41 @@ let billingHistory = [
     { date: '2023-10-01', description: 'Developer Starter - Monthly', amount: '$9.00', status: 'paid', invoice: '#INV-004' }
 ];
 
+function updateCurrentUserFields() {
+    document.getElementById('userName').innerHTML = currentUser.full_name;
+    document.getElementById('userEmail').innerHTML = currentUser.email;
+    document.getElementById('userAvatar').innerHTML = currentUser.avatar;
+    document.getElementById('profileAvatar').innerHTML = currentUser.avatar;
+    document.getElementById('profileUsername').value = currentUser.username;
+    document.getElementById('profileDisplayNameInput').value = currentUser.full_name;
+    document.getElementById('profileEmail').value = currentUser.email;
+    document.getElementById('profileBio').value = currentUser.bio;
+    document.getElementById('profileCompany').value = currentUser.company;
+    document.getElementById('profileLocation').value = currentUser.location;
+    document.getElementById('profileDisplayName').textContent = currentUser.full_name;
+    document.getElementById('profileMemberSince').textContent = `Member since ${currentUser.created_at}`;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/account_data', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        for (const key in currentUser) {
+            try {
+                currentUser[key] = data[key];
+            } catch (ex) {
+                console.log("Invalid key: " + key + " " + ex);
+            }
+        }
+        console.log(currentUser);
+        updateCurrentUserFields();
+    });
+
     // Initialize user data
     updateUserDisplay();
     populateActivity();
@@ -66,16 +100,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (profileAvatar) {
         profileAvatar.textContent = currentUser.avatar;
     }
-    
-    // Pre-fill profile form
-    document.getElementById('profileUsername').value = currentUser.username;
-    document.getElementById('profileDisplayNameInput').value = currentUser.displayName;
-    document.getElementById('profileEmail').value = currentUser.email;
-    document.getElementById('profileBio').value = currentUser.bio;
-    document.getElementById('profileCompany').value = currentUser.company;
-    document.getElementById('profileLocation').value = currentUser.location;
-    document.getElementById('profileDisplayName').textContent = currentUser.displayName;
-    document.getElementById('profileMemberSince').textContent = `Member since ${currentUser.memberSince}`;
+
+    updateCurrentUserFields();
     
     // Global search
     const searchInput = document.getElementById('globalSearch');
@@ -275,27 +301,52 @@ function handleProfileUpdate(event) {
     saveBtn.innerHTML = '<span class="spinner"></span>SAVING...';
     saveBtn.disabled = true;
     
-    // Simulate API call
-    setTimeout(() => {
-        currentUser = {
-            ...currentUser,
+    fetch('/api/profile_update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
             username: document.getElementById('profileUsername').value,
-            displayName: document.getElementById('profileDisplayNameInput').value,
+            full_name: document.getElementById('profileDisplayNameInput').value,
             email: document.getElementById('profileEmail').value,
             bio: document.getElementById('profileBio').value,
             company: document.getElementById('profileCompany').value,
             location: document.getElementById('profileLocation').value
-        };
-        
-        document.getElementById('profileDisplayName').textContent = currentUser.displayName;
-        updateUserDisplay();
-        
-        saveBtn.innerHTML = '✓ SAVED!';
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            currentUser = {
+                ...currentUser,
+                username: document.getElementById('profileUsername').value,
+                full_name: document.getElementById('profileDisplayNameInput').value,
+                email: document.getElementById('profileEmail').value,
+                bio: document.getElementById('profileBio').value,
+                company: document.getElementById('profileCompany').value,
+                location: document.getElementById('profileLocation').value
+            };
+            
+            document.getElementById('profileDisplayName').textContent = currentUser.displayName;
+            updateUserDisplay();
+            
+            saveBtn.innerHTML = '✓ SAVED!';
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }, 2000);
+        } else {
+            throw new Error();
+        }
+    })
+    .catch(error => {
+        saveBtn.innerHTML = 'X ERROR!';
         setTimeout(() => {
             saveBtn.innerHTML = originalText;
             saveBtn.disabled = false;
         }, 2000);
-    }, 1500);
+    });
 }
 
 function cancelProfileEdit() {

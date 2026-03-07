@@ -136,27 +136,22 @@ class AccountManager:
         
         return None
 
-    async def authenticate_user(self, username_or_email: str, password: str) -> Optional[User]:
+    async def authenticate_user(self, email: str, password: str) -> Optional[User]:
         """
-        Authenticate user by username/email and password.
+        Authenticate user by email and password.
         
         Args:
-            username_or_email: Pick your damn poison :)
-            password: Unencrypted password
+            email: User's email :)
+            password: Unencrypted password :)
 
         Returns:
             A corporate-grade user object...
             ... except for the Kevin's day offs.
         """
-        # Try username first
-        user = await self.get_user_by_username(username_or_email)
-        
-        # If not found, try email
-        if not user:
-            user = await self.get_user_by_email(username_or_email)
+        user = await self.get_user_by_email(email)
         
         if not user:
-            print(f"❌ User {username_or_email} not found")
+            print(f"❌ User {user} not found")
             return None
         
         # Verify password
@@ -166,7 +161,7 @@ class AccountManager:
             print(f"✅ User {user.username} authenticated successfully")
             return user
         
-        print(f"❌ Invalid password for {username_or_email}")
+        print(f"❌ Invalid password for {user}")
         return None
 
     async def update_last_login(self, user_id: int) -> bool:
@@ -211,6 +206,50 @@ class AccountManager:
         query = "SELECT EXISTS(SELECT * FROM users WHERE email = $1)"
         result = await self.db.execute_query(query, user_email)
         return result['exists'] if result else False
+
+    async def update_user_in_database(self, user: User) -> bool:
+        """
+        Update ALL user fields in database.
+        So lazy it updates everything automatically.
+        """
+        if not self.initialized:
+            raise RuntimeError("AccountManager not initialized. Call initialize() first.")
+        
+        # Convert User object to dict, excluding None values
+        user_data = user.model_dump(exclude_none=True)
+        
+        # Remove fields that shouldn't be updated directly
+        forbidden_fields = ['id', 'created_at']  # Never update these
+        for field in forbidden_fields:
+            user_data.pop(field, None)
+        
+        if 'kevin_notes' in user_data and isinstance(user_data['kevin_notes'], dict):
+            user_data['kevin_notes'] = json.dumps(user_data['kevin_notes'])
+        
+        # Ensure updated_at is current
+        user_data['updated_at'] = datetime.now(UTC).replace(tzinfo=None)
+        
+        # Build dynamic UPDATE query
+        set_clause = ", ".join([f"{key} = ${i+2}" for i, key in enumerate(user_data.keys())])
+        values = list(user_data.values())
+        
+        query = f"""
+            UPDATE users 
+            SET {set_clause}
+            WHERE id = $1
+            RETURNING id
+        """
+        
+        # Execute with user.id as first parameter
+        result = await self.db.execute_query(query, user.id, *values)
+        
+        if result:
+            print(f"✅ User {user.id} updated successfully")
+            print(f"   Kevin notes: {user.kevin_notes}")
+            return True
+        
+        print(f"❌ Failed to update user {user.id}")
+        return False
 
     async def close(self):
         """Close database connection."""

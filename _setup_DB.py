@@ -25,6 +25,8 @@ async def create_users_table():
             hashed_password VARCHAR(255) NOT NULL,
             full_name VARCHAR(100),
             bio TEXT,
+            location VARCHAR(255),
+            company VARCHAR(255),
             avatar VARCHAR(255),
             is_active BOOLEAN DEFAULT TRUE,
             is_superuser BOOLEAN DEFAULT FALSE,

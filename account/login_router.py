@@ -17,12 +17,8 @@ async def login_user(response: Response, form: LoginForm):
             message="invalid",
             token=""
         )
-
-    hash = user.hashed_password
     
-    correct_pass = bcrypt.checkpw(form.password.encode(), hash.encode())
-    
-    if not correct_pass:
+    if not account_manager.authenticate_user(form.email, form.password):
         return LoginResponse(
             success=False,
             message="invalid",

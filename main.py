@@ -2,11 +2,14 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from pathlib import Path
-from account import register_router
-from account import login_router
 from navigation import HTML_responder
 from account.account_manager import account_manager
 from authorization.JWT_token import JWT_token_dispenser
+
+from account import register_router
+from account import login_router
+from account import account_data_router
+from account import profile_update_router
 
 async def app_startup():
     print("Backend start up!")
@@ -29,3 +32,5 @@ app.mount("/static/", StaticFiles(directory=Path(BASE_DIR, "static")), name="sta
 app.include_router(HTML_responder.router)
 app.include_router(register_router.router, prefix="/api")
 app.include_router(login_router.router, prefix="/api") 
+app.include_router(account_data_router.router, prefix="/api") 
+app.include_router(profile_update_router.router, prefix="/api") 

@@ -15,6 +15,8 @@ class User(BaseModel):
     full_name: Optional[str] = Field(None, max_length=100)
     bio: Optional[str] = None
     avatar: Optional[str] = Field(None, max_length=255)
+    company: Optional[str] = Field(None, max_length=255)
+    location: Optional[str] = Field(None, max_length=255)
     
     # Status fields
     is_active: bool = True
@@ -26,8 +28,8 @@ class User(BaseModel):
     unicorn_sightings: int = 0
     
     # Timestamps
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
     last_login: Optional[datetime] = None
     last_logout: Optional[datetime] = None
 
@@ -35,7 +37,7 @@ class User(BaseModel):
         from_attributes = True  # Allows creation from asyncpg record
     
     def get_payload(self) -> dict:
-        tomorrow = datetime.now(UTC) + timedelta(days=1)
+        expiration_date = datetime.now(UTC) + timedelta(days=1)
         return {
             "id": self.id,
             "username": self.username,
@@ -44,5 +46,5 @@ class User(BaseModel):
             "avatar": self.avatar,
             "soul_status": self.soul_status,
             "is_superuser": self.is_superuser,
-            "exp": tomorrow
+            "exp": expiration_date
         }
