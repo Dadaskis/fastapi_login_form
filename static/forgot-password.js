@@ -84,26 +84,33 @@ function handleForgotRequest(event) {
     // Show loading state
     submitButton.disabled = true;
     submitButton.innerHTML = '<span class="spinner"></span>SENDING...';
-    
-    // Simulate API call
-    setTimeout(() => {
-        // In production, this would be an actual API call
-        userEmail = email.value;
-        
-        // Generate fake code for demo (in production, this would be sent via email)
-        recoveryCode = Math.floor(100000 + Math.random() * 900000).toString();
-        console.log(`[DEMO] Recovery code for ${userEmail}: ${recoveryCode}`);
-        
-        // Show code step
-        goToStep(2);
-        
-        // Reset button
+
+    fetch('/api/reset_password_verification', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: email.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            goToStep(2);
+
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'SEND RECOVERY CODE';
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        alert("Something went wrong and we couldn't send you a verification code. Please, try again later!")
+
         submitButton.disabled = false;
         submitButton.innerHTML = 'SEND RECOVERY CODE';
-        
-        // Show demo message
-        showDemoMessage(`Demo code: ${recoveryCode} (would be sent to ${userEmail})`);
-    }, 1500);
+    });
 }
 
 function handleCodeVerification(event) {
@@ -135,33 +142,36 @@ function handleCodeVerification(event) {
     // Show loading state
     verifyButton.disabled = true;
     verifyButton.innerHTML = '<span class="spinner"></span>VERIFYING...';
-    
-    // Simulate API call
-    setTimeout(() => {
-        // In production, this would verify against the actual sent code
-        if (code.value === recoveryCode) {
-            // Code correct, go to new password step
+
+    fetch('/api/reset_password_confirmation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: email.value,
+            code: code.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
             goToStep(3);
-            
-            // Pre-fill password with demo data if in development
-            if (code.value === recoveryCode && window.location.hostname === 'localhost') {
-                const demoPassword = document.getElementById('newPassword');
-                if (demoPassword) {
-                    demoPassword.value = 'demo123';
-                    demoPassword.classList.add('valid');
-                    updatePasswordRequirements('demo123');
-                }
-            }
+
+            verifyButton.disabled = false;
+            verifyButton.innerHTML = 'VERIFY CODE';
         } else {
-            // Wrong code
-            code.classList.add('error');
-            codeError.textContent = 'INVALID RECOVERY CODE';
-            codeError.classList.add('show');
+            throw new Error(data.message);
         }
+    })
+    .catch(error => {
+        code.classList.add('error');
+        codeError.textContent = 'INVALID RECOVERY CODE';
+        codeError.classList.add('show');
         
         verifyButton.disabled = false;
         verifyButton.innerHTML = 'VERIFY CODE';
-    }, 1000);
+    });
 }
 
 function handleNewPassword(event) {
@@ -215,17 +225,32 @@ function handleNewPassword(event) {
     resetButton.disabled = true;
     resetButton.innerHTML = '<span class="spinner"></span>RESETTING...';
     
-    // Simulate API call
-    setTimeout(() => {
-        // Success - show completion screen
-        goToStep(4);
-        
-        // In production, this would actually update the password
-        console.log(`[DEMO] Password reset for ${userEmail} to: ${newPassword.value}`);
+    fetch('/api/reset_password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            password: newPassword.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            goToStep(4);
+
+            resetButton.disabled = false;
+            resetButton.innerHTML = 'RESET PASSWORD';
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        alert("Something went wrong and we couldn't reset your password. Please, try again later!")
         
         resetButton.disabled = false;
         resetButton.innerHTML = 'RESET PASSWORD';
-    }, 1500);
+    });
 }
 
 function goToStep(step) {

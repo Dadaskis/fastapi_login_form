@@ -29,14 +29,20 @@ class JWTTokenDispenser:
                 file.write(" ")
             assert False
     
-    def make_token(self, user: User) -> str:
-        payload = user.get_payload()
+    def make_token(self, payload: dict) -> str:
         return jwt.encode(payload, self.secret_key, algorithm="HS256")
 
     def get_user_id_from_token(self, token: str) -> int:
         try:
             dict = jwt.decode(token, self.secret_key, algorithms=["HS256"])
             return dict.get("id")
+        except jwt.InvalidTokenError:
+            return None  # Don't crash, just return None
+    
+    def get_token_payload(self, token: str) -> dict:
+        try:
+            dict = jwt.decode(token, self.secret_key, algorithms=["HS256"])
+            return dict
         except jwt.InvalidTokenError:
             return None  # Don't crash, just return None
 

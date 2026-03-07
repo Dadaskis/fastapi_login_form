@@ -18,7 +18,7 @@ async def login_user(response: Response, form: LoginForm):
             token=""
         )
 
-    token = JWT_token_dispenser.make_token(user)
+    token = JWT_token_dispenser.make_token(user.get_payload())
 
     response.set_cookie(
         "token",
