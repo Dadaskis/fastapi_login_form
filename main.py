@@ -5,6 +5,7 @@ from pathlib import Path
 from navigation import HTML_responder
 from account.account_manager import account_manager
 from authorization.JWT_token import JWT_token_dispenser
+from email_verification.email_sender import email_sender
 
 from account import register_router
 from account import login_router
@@ -14,11 +15,13 @@ from account import change_password_router
 
 async def app_startup():
     print("Backend start up!")
+    email_sender.initialize()
     await account_manager.initialize()
     JWT_token_dispenser.initialize()
 
 async def app_shutdown():
     print("Backend shutting down!")
+    email_sender.close()
 
 @asynccontextmanager
 async def app_lifespan(api: FastAPI):

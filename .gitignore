@@ -1,3 +1,4 @@
 __pycache__
 *.pyc
 JWT_secret.txt
+SMTP_config.json
