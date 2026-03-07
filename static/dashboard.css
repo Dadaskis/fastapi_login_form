@@ -1132,3 +1132,131 @@ input:disabled + .toggle-slider {
         display: none;
     }
 }
+
+/* Notification system */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.notification {
+    background: #0d1f2d;
+    border: 2px solid #006064;
+    backdrop-filter: blur(10px);
+    color: #e0f7fa;
+    padding: 16px 24px;
+    border-radius: 4px;
+    font: condensed 0.9em "Fira Sans", sans-serif;
+    box-shadow: 0 0 20px rgba(0,96,100,0.3);
+    animation: notificationSlide 0.3s ease-out;
+    pointer-events: auto;
+    min-width: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+.notification::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+}
+
+.notification.success {
+    border-left: 4px solid #00ff00;
+    box-shadow: 0 0 20px rgba(0,255,0,0.2);
+}
+
+.notification.success::before {
+    background: #00ff00;
+    box-shadow: 0 0 10px #00ff00;
+}
+
+.notification.error {
+    border-left: 4px solid #ff3300;
+    box-shadow: 0 0 20px rgba(255,51,0,0.2);
+}
+
+.notification.error::before {
+    background: #ff3300;
+    box-shadow: 0 0 10px #ff3300;
+}
+
+.notification.warning {
+    border-left: 4px solid #ff8200;
+    box-shadow: 0 0 20px rgba(255,130,0,0.2);
+}
+
+.notification.warning::before {
+    background: #ff8200;
+    box-shadow: 0 0 10px #ff8200;
+}
+
+.notification.info {
+    border-left: 4px solid #59e0f0;
+    box-shadow: 0 0 20px rgba(89,224,240,0.2);
+}
+
+.notification.info::before {
+    background: #59e0f0;
+    box-shadow: 0 0 10px #59e0f0;
+}
+
+.notification-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #e0f7fa;
+}
+
+.notification-message {
+    color: #b0e0e0;
+    font-size: 0.9em;
+}
+
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: #006064;
+    animation: notificationProgress 3s linear forwards;
+}
+
+@keyframes notificationSlide {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes notificationProgress {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+.notification.fade-out {
+    animation: notificationFade 0.3s ease-out forwards;
+}
+
+@keyframes notificationFade {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}

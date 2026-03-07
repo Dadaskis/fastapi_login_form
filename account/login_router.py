@@ -9,16 +9,9 @@ router = APIRouter()
 
 @router.post("/login_user", response_model=LoginResponse)
 async def login_user(response: Response, form: LoginForm):
-    user = await account_manager.get_user_by_email(form.email)
+    user = await account_manager.authenticate_user(form.email, form.password)
     
-    if not user:
-        return LoginResponse(
-            success=False,
-            message="invalid",
-            token=""
-        )
-    
-    if not account_manager.authenticate_user(form.email, form.password):
+    if user == None:
         return LoginResponse(
             success=False,
             message="invalid",

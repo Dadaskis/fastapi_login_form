@@ -45,6 +45,64 @@ let billingHistory = [
     { date: '2023-10-01', description: 'Developer Starter - Monthly', amount: '$9.00', status: 'paid', invoice: '#INV-004' }
 ];
 
+// Notification manager
+const Notifications = {
+    container: null,
+    
+    init() {
+        // Create notification container if it doesn't exist
+        if (!this.container) {
+            this.container = document.createElement('div');
+            this.container.className = 'notification-container';
+            document.body.appendChild(this.container);
+        }
+    },
+    
+    show(title, message, type = 'info', duration = 3000) {
+        this.init();
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        notification.innerHTML = `
+            <div class="notification-title">${title}</div>
+            <div class="notification-message">${message}</div>
+            <div class="notification-progress" style="animation-duration: ${duration}ms"></div>
+        `;
+        
+        this.container.appendChild(notification);
+        
+        // Auto-remove after duration
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, duration);
+    },
+    
+    success(title, message, duration = 3000) {
+        this.show(title, message, 'success', duration);
+    },
+    
+    error(title, message, duration = 3000) {
+        this.show(title, message, 'error', duration);
+    },
+    
+    warning(title, message, duration = 3000) {
+        this.show(title, message, 'warning', duration);
+    },
+    
+    info(title, message, duration = 3000) {
+        this.show(title, message, 'info', duration);
+    }
+};
+
+// Initialize notifications
+document.addEventListener('DOMContentLoaded', () => {
+    Notifications.init();
+});
+
 function updateCurrentUserFields() {
     document.getElementById('userName').innerHTML = currentUser.full_name;
     document.getElementById('userEmail').innerHTML = currentUser.email;
@@ -76,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("Invalid key: " + key + " " + ex);
             }
         }
-        console.log(currentUser);
         updateCurrentUserFields();
     });
 
@@ -302,7 +359,7 @@ function handleProfileUpdate(event) {
     saveBtn.disabled = true;
     
     fetch('/api/profile_update', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -330,6 +387,12 @@ function handleProfileUpdate(event) {
             
             document.getElementById('profileDisplayName').textContent = currentUser.displayName;
             updateUserDisplay();
+            updateCurrentUserFields();
+
+            Notifications.success(
+                'PROFILE UPDATED!',
+                'Data has been successfully secured.'
+            );
             
             saveBtn.innerHTML = '✓ SAVED!';
             setTimeout(() => {
@@ -341,6 +404,10 @@ function handleProfileUpdate(event) {
         }
     })
     .catch(error => {
+        Notifications.error(
+            'FAILED TO UPDATE THE PROFILE!',
+            'Please, try again later.'
+        );
         saveBtn.innerHTML = 'X ERROR!';
         setTimeout(() => {
             saveBtn.innerHTML = originalText;
@@ -367,17 +434,34 @@ function handlePasswordChange(event) {
     const confirmPass = document.getElementById('confirmNewPassword').value;
     
     if (!currentPass || !newPass || !confirmPass) {
-        alert('ALL FIELDS REQUIRED');
+        Notifications.warning(
+            'INCOMPLETE FIELDS',
+            'All password fields are required. Kevin is watching.'
+        );
         return;
     }
     
     if (newPass.length < 6) {
-        alert('PASSWORD TOO SHORT (MIN 6)');
+        Notifications.error(
+            'PASSWORD TOO SHORT',
+            'Minimum 6 characters required. Your soul deserves better.'
+        );
         return;
     }
     
     if (newPass !== confirmPass) {
-        alert('PASSWORDS DO NOT MATCH');
+        Notifications.error(
+            'PASSWORDS DO NOT MATCH',
+            'Kevin has noted this inconsistency.'
+        );
+        return;
+    }
+
+    if (newPass == currentPass) {
+        Notifications.error(
+            'OLD PASSWORD IS MATCHING THE NEW ONE',
+            'Please, enter a different new password.'
+        );
         return;
     }
     
@@ -387,7 +471,54 @@ function handlePasswordChange(event) {
     saveBtn.innerHTML = '<span class="spinner"></span>UPDATING...';
     saveBtn.disabled = true;
     
+    fetch('/api/change_password', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            current_password: document.getElementById('currentPassword').value,
+            new_password: document.getElementById('newPassword').value,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Notifications.success(
+                'PASSWORD UPDATED',
+                'Your credentials have been secured. Kevin approves.'
+            );
+            
+            saveBtn.innerHTML = '✓ SAVED!';
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }, 2000);
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        Notifications.error(
+            'FAILED TO UPDATE THE PASSWORD!',
+            error.toString().toUpperCase()
+        );
+        saveBtn.innerHTML = 'X ERROR!';
+        setTimeout(() => {
+            saveBtn.innerHTML = originalText;
+            saveBtn.disabled = false;
+        }, 2000);
+    });
+
+    /*
+    // Simulate API call
     setTimeout(() => {
+        // Success notification
+        Notifications.success(
+            'PASSWORD UPDATED',
+            'Your credentials have been secured. Kevin approves.'
+        );
+        
         saveBtn.innerHTML = '✓ UPDATED!';
         event.target.reset();
         
@@ -396,10 +527,14 @@ function handlePasswordChange(event) {
             saveBtn.disabled = false;
         }, 2000);
     }, 1500);
+    */
 }
 
 function enable2FA() {
-    alert('2FA ENABLED. CHECK YOUR AUTHENTICATOR APP.\n\n(Just kidding, this is a demo. Kevin from accounting is now your 2FA backup.)');
+    Notifications.success(
+        '2FA ENABLED. CHECK YOUR AUTHENTICATOR APP.',
+        '(Just kidding, this is a demo. Kevin from accounting is now your 2FA backup.)'
+    );
 }
 
 function createApiKey() {

@@ -7,7 +7,7 @@ from authorization.JWT_token import JWT_token_dispenser
 
 router = APIRouter()
 
-@router.post("/profile_update", response_model=ProfileUpdateResponse)
+@router.put("/profile_update", response_model=ProfileUpdateResponse)
 async def profile_update(request: Request, form: ProfileUpdateForm):
     token = request.cookies.get("token")
 

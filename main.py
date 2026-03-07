@@ -10,6 +10,7 @@ from account import register_router
 from account import login_router
 from account import account_data_router
 from account import profile_update_router
+from account import change_password_router
 
 async def app_startup():
     print("Backend start up!")
@@ -34,3 +35,4 @@ app.include_router(register_router.router, prefix="/api")
 app.include_router(login_router.router, prefix="/api") 
 app.include_router(account_data_router.router, prefix="/api") 
 app.include_router(profile_update_router.router, prefix="/api") 
+app.include_router(change_password_router.router, prefix="/api")
