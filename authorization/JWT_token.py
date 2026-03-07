@@ -1,6 +1,6 @@
 import jwt
 import os
-from .user import User
+from account.user import User
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent

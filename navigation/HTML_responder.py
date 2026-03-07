@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
+from authorization.JWT_token import JWT_token_dispenser
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +24,31 @@ def create_route_handler(template_name: str):
         )
     return handler
 
+def create_protected_route_handler(template_name: str):
+    """Factory function that returns a protected handler for a specific template"""
+    async def handler(request: Request):
+        token = request.cookies.get("token")
+    
+        if not token:
+            return RedirectResponse(url="/login")
+        
+        try:
+            user_id = JWT_token_dispenser.get_user_id_from_token(token)
+            if user_id == None:
+                return RedirectResponse(url="/login")
+
+            return templates.TemplateResponse(
+                request=request,
+                name=template_name
+            )
+        except:
+            return RedirectResponse(url="/login")
+    return handler
+
+protected_pages = [
+    "dashboard"
+]
+
 # Dynamically create routes
 for html_file in html_files:
     route_name = html_file.replace(".html", "")
@@ -29,4 +56,7 @@ for html_file in html_files:
     if route_name == "index":
         router.get("/")(create_route_handler(html_file))
     else:
-        router.get(f"/{route_name}")(create_route_handler(html_file))
+        if route_name in protected_pages:
+            router.get(f"/{route_name}")(create_protected_route_handler(html_file))
+        else:
+            router.get(f"/{route_name}")(create_route_handler(html_file))

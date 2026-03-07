@@ -6,7 +6,7 @@ from account import register_router
 from account import login_router
 from navigation import HTML_responder
 from account.account_manager import account_manager
-from account.JWT_token import JWT_token_dispenser
+from authorization.JWT_token import JWT_token_dispenser
 
 async def app_startup():
     print("Backend start up!")

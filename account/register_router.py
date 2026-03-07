@@ -20,7 +20,7 @@ async def register_user(response: Response, form: RegisterForm):
         )
 
     user = await account_manager.register_user(
-        form.username, form.email, form.password
+        form.username, form.email, form.password, form.username
     )
 
     if user:

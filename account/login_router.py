@@ -3,7 +3,7 @@ from fastapi import APIRouter, Response
 from .login_form import LoginForm
 from .login_response import LoginResponse
 from .account_manager import account_manager
-from .JWT_token import JWT_token_dispenser
+from authorization.JWT_token import JWT_token_dispenser
 
 router = APIRouter()
 
