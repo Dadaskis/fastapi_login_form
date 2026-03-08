@@ -8,5 +8,6 @@ Potential upgrades:
 - Maybe cleaning up the code in some places
 - Oh, yeah, write unit tests for backend
 - More documentation wouldn't be bad too
+- Oh and also there's far more rate limits required all over the place, but I'm lazy to add them as well...
 
 But for now? I guess it's just fine as-is, because I wanted to make a login page and I went way beyond that.
