@@ -1,0 +1,12 @@
+So it's 3:22 AM, perfect time to question all my life choices and actually end this project.
+It's been really fun to make this project and I think I'd consider to work on it more,
+but the only perfect thing is the one that was never finished in the first place.
+
+Potential upgrades:
+- More email verifications in places where they are needed, like registration, password/email changing
+- Probably more Kevin
+- Maybe cleaning up the code in some places
+- Oh, yeah, write unit tests for backend
+- More documentation wouldn't be bad too
+
+But for now? I guess it's just fine as-is, because I wanted to make a login page and I went way beyond that.
