@@ -25,7 +25,7 @@ async def login_user(response: Response, form: LoginForm):
         token,
         httponly=True,
         secure=True,
-        samesite="strict"
+        samesite="lax"
     )
 
     return LoginResponse(

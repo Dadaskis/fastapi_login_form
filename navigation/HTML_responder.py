@@ -30,10 +30,13 @@ def create_protected_route_handler(template_name: str):
         token = request.cookies.get("token")
     
         if not token:
+            print("No token!!!")
             return RedirectResponse(url="/login")
         
         try:
-            user_id = JWT_token_dispenser.get_user_id_from_token(token)
+            user_dict = JWT_token_dispenser.get_token_payload(token)
+            print(user_dict)
+            user_id = user_dict.get("id", None)
             if user_id == None:
                 return RedirectResponse(url="/login")
 

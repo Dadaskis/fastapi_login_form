@@ -269,6 +269,5 @@ function isValidEmail(email) {
 }
 
 function handleSocialRegister(provider) {
-    alert(`${provider.toUpperCase()} REGISTRATION INITIATED`);
-    // window.location.href = `/auth/${provider}/register`;
+    window.location.href = `/login/${provider}`;
 }

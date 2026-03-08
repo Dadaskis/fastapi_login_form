@@ -251,6 +251,78 @@ class AccountManager:
         print(f"❌ Failed to update user {user.id}")
         return False
 
+    async def create_oauth_user(self, email: str, username: str, provider: str) -> Optional[User]:
+        """
+        Create a new user from OAuth login (no password).
+        
+        Args:
+            email: User's email from OAuth provider
+            username: Desired username (from display_name or email)
+            provider: 'google' or 'github'
+        
+        Returns:
+            User object if created, None if failed
+        """
+        if not self.initialized:
+            raise RuntimeError("AccountManager not initialized. Call initialize() first.")
+        
+        # Check if user already exists
+        existing = await self.get_user_by_email(email)
+        if existing:
+            print(f"⚠️ User with email {email} already exists. Returning existing.")
+            return existing
+        
+        # Generate a random password (user will never use it)
+        # They'll always login via OAuth, but DB requires something
+        import secrets
+        import bcrypt
+        random_password = secrets.token_urlsafe(32)
+        hashed_password = bcrypt.hashpw(random_password.encode(), bcrypt.gensalt())
+        
+        # Prepare user data
+        now = datetime.now(UTC).replace(tzinfo=None)
+        user_data = {
+            "username": username,
+            "email": email,
+            "hashed_password": hashed_password.decode(),
+            "is_active": True,
+            "soul_status": "pending",  # Kevin's watching
+            "kevin_notes": json.dumps({
+                "provider": provider,
+                "created_at": now.isoformat(),
+                "oauth": True
+            }),
+            "created_at": now,
+            "updated_at": now
+        }
+        
+        # Build INSERT query
+        columns = ", ".join(user_data.keys())
+        placeholders = ", ".join([f"${i+1}" for i in range(len(user_data))])
+        values = list(user_data.values())
+        
+        query = f"""
+            INSERT INTO users ({columns})
+            VALUES ({placeholders})
+            RETURNING id
+        """
+        
+        try:
+            result = await self.db.execute_query(query, *values)
+            if result:
+                user_id = result['id']
+                print(f"✅ OAuth user created: {username} ({email}) via {provider}")
+                print(f"   Soul status: pending. Kevin has logged this.")
+                
+                # Return full user object
+                return await self.get_user_by_id(user_id)
+        except Exception as e:
+            print(f"❌ Failed to create OAuth user: {e}")
+            import traceback
+            traceback.print_exc()
+        
+        return None
+
     async def close(self):
         """Close database connection."""
         if self.db:

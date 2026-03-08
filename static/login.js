@@ -85,6 +85,5 @@ function isValidEmail(email) {
 }
 
 function handleSocialLogin(provider) {
-    alert(`${provider.toUpperCase()} AUTHENTICATION PROTOCOL INITIATED`);
-    // window.location.href = `/auth/${provider}`;
+    window.location.href = `/login/${provider}`;
 }

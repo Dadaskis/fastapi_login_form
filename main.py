@@ -17,6 +17,7 @@ from account import change_password_router
 from account import reset_password_verification_router
 from account import reset_password_confirmation_router
 from account import reset_password_router
+from account import oauth2_router
 
 async def app_startup():
     print("Backend start up!")
@@ -42,6 +43,7 @@ BASE_DIR = Path(__file__).resolve().parent
 app = FastAPI(lifespan=app_lifespan)
 app.mount("/static/", StaticFiles(directory=Path(BASE_DIR, "static")), name="static")
 app.include_router(HTML_responder.router)
+app.include_router(oauth2_router.router)
 
 api_routers = [
     register_router.router,
