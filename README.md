@@ -1,5 +1,7 @@
 # FastAPI Login System
 
+<img width="1920" height="997" alt="THE Image" src="https://github.com/user-attachments/assets/b1354143-7e15-4f9d-bff5-2ec1f1f6e6a2" />
+
 A comprehensive, production-ready authentication system built with FastAPI, featuring email/password registration, OAuth2 (Google/GitHub), password recovery, and a cyberpunk-themed dashboard.
 
 ## Features
