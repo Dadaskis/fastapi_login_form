@@ -40,7 +40,7 @@ A comprehensive, production-ready authentication system built with FastAPI, feat
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/fastapi_login_form.git
+git clone https://github.com/dadaskis/fastapi_login_form.git
 cd fastapi_login_form
 ```
 
